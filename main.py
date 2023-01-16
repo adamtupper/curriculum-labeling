@@ -51,7 +51,7 @@ parser.add_argument('--pretrained', dest='pretrained', action='store_true',
                     help='use pre-trained model')
 parser.add_argument('--root_dir', type = str, default = 'experiments',
                         help='folder where results are to be stored')
-parser.add_argument('--data_dir', type = str, default = '/data/cifar10/',
+parser.add_argument('--data_dir', type = str, default = './data/cifar10/',
                         help='folder where data is stored')
 parser.add_argument('--n_cpus', default=12, type=int,
                     help='number of cpus for data loading')
