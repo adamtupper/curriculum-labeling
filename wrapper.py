@@ -122,10 +122,6 @@ class Wrapper:
         3) Get subsets for labeled, unlabeled and validation samples (based on seed)
         4) [Optional] Get test set if in debug mode
         """
-        # download precomputed zca components and mean for CIFAR10
-        urllib.urlretrieve("http://cs.virginia.edu/~pcascante/zca_components.npy", "zca_components.npy")
-        urllib.urlretrieve("http://cs.virginia.edu/~pcascante/zca_mean.npy", "zca_mean.npy")
-
         # load data
         data = dataloaders.load_data_subsets(self.args.augPolicy, self.args.dataset, self.args.data_dir)
         self.set_data(data)
