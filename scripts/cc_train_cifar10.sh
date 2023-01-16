@@ -33,4 +33,14 @@ pip install --no-index -r cc_requirements.txt
 pip install -r cc_requirements_extra.txt
 
 # Run training script
-# TODO: Call training script
+python main.py \
+    --seed $SLURM_ARRAY_TASK_ID \
+    --nesterov \
+    --weight-decay 0.0005 \
+    --arch WRN28_2 \
+    --batch_size 512 \
+    --epochs 700 \
+    --lr_rampdown_epochs 750 \
+    --add_name WRN28_CIFAR10_AUG_MIX_SWA \
+    --mixup \
+    --swa
