@@ -34,6 +34,8 @@ pip install -r cc_requirements_extra.txt
 
 # Run training script
 python main.py \
+    --root_dir $scratch \
+    --data_dir $SLURM_TMPDIR/data \
     --seed $SLURM_ARRAY_TASK_ID \
     --nesterov \
     --weight-decay 0.0005 \
