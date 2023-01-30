@@ -1,12 +1,27 @@
 #!/bin/bash
-#SBATCH --array=831,832,727%1
+#SBATCH --array=1-1%1
 #SBATCH --mem=32000M
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:1
 #SBATCH --ntasks-per-node=8
-#SBATCH --time=24:00:00
+#SBATCH --time=7-00:00:00
 #SBATCH --mail-user=adam.tupper.1@ulaval.ca
 #SBATCH --mail-type=ALL
+
+# Check for random seed
+if [ -z "$1" ]
+  then
+    echo "No seed supplied"
+    exit 1
+fi
+
+# Print Job info
+echo "Current working directory: `pwd`"
+echo "Starting run at: `date`"
+echo ""
+echo "Job Array ID / Job ID: $SLURM_ARRAY_JOB_ID / $SLURM_JOB_ID"
+echo "This is job $SLURM_ARRAY_TASK_ID out of $SLURM_ARRAY_TASK_COUNT jobs."
+echo ""
 
 module purge
 
@@ -36,7 +51,9 @@ pip install -r cc_requirements_extra.txt
 python main.py \
     --root_dir $scratch \
     --data_dir $SLURM_TMPDIR/data \
-    --seed $SLURM_ARRAY_TASK_ID \
+    --seed $1 \
+    --checkpoint_epochs 100 \
+    --num_labeled 400 \
     --nesterov \
     --weight-decay 0.0005 \
     --arch WRN28_2 \
