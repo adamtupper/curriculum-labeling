@@ -1,10 +1,10 @@
-matplotlib==3.6.1
-numpy==1.21.4
-protobuf==3.20.1
+exceptiongroup>=1.1.0
+matplotlib==3.3.4
+numpy==1.21.0
 pytest==7.2.0
 scipy==1.4.1
 tensorflow-gpu==2.2.0
-torch==1.6.0+cu101
+torch==1.12.1+cu102
 torchcontrib==0.0.2
-torchvision==0.7.0+cu101
+torchvision==0.13.1+cu102
 wandb==0.12.5
