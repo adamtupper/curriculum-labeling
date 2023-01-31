@@ -1,9 +1,8 @@
-matplotlib==3.6.1+computecanada
-numpy==1.21.4+computecanada
-protobuf==3.20.1+computecanada
+matplotlib==3.3.4+computecanada
+numpy==1.21.0+computecanada
 pytest==7.2.0+computecanada
 scipy==1.4.1+computecanada
 tensorflow_gpu==2.2.0
-torch==1.6.0+computecanada
-torchvision==0.7.0+computecanada
+torch==1.12.1+computecanada
+torchvision==0.13.1+torch1121.computecanada
 wandb==0.12.5+computecanada

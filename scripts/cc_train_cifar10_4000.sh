@@ -44,8 +44,8 @@ module load python/3.8.10 cuda cudnn
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
-pip install --no-index -r cc_requirements.txt
 pip install -r cc_requirements_extra.txt
+pip install --no-index -r cc_requirements.txt
 
 # Run training script
 python main.py \
