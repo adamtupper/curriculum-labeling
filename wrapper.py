@@ -190,7 +190,7 @@ class Wrapper:
 
         if self.args.swa:
             prRed ('Using SWA!')
-            from torchcontrib.optim import SWA
+            from utils.swa import SWA
             optimizer = SWA(optimizer)
         
         self.model_optimizer = optimizer

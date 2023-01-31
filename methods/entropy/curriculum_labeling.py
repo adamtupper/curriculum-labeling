@@ -13,7 +13,7 @@ from utils.scheduler_ramps import *
 from ..base import *
 
 # from https://github.com/pytorch/contrib = pip install torchcontrib
-from torchcontrib.optim import SWA
+from utils.swa import SWA
 
 class Curriculum_Labeling(Train_Base):
     """
