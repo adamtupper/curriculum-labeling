@@ -33,11 +33,11 @@ mkdir -p $WANDB_DIR
 
 # Copy data and code to compute node
 mkdir $SLURM_TMPDIR/data
-tar cf $project/curriculum-learning.tar.gz $project/curriculum-learning
-tar xf $project/curriculum-learning.tar.gz -C $SLURM_TMPDIR/curriculum-learning
+tar cf $project/curriculum-labeling.tar.gz $project/curriculum-labeling
+tar xf $project/curriculum-labeling.tar.gz -C $SLURM_TMPDIR/curriculum-labeling
 tar xf $project/data/cifar-10-python.tar.gz -C $SLURM_TMPDIR/data
 
-cd $SLURM_TMPDIR/curriculum-learning
+cd $SLURM_TMPDIR/curriculum-labeling
 
 # Create virtual environment
 module load python/3.8.10 cuda cudnn
