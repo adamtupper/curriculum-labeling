@@ -67,7 +67,7 @@ python main.py \
     --data_dir $SLURM_TMPDIR/data \
     --seed $1 \
     --checkpoint_epochs 100 \
-    --num_labeled 400 \
+    --num_labeled 100 \
     --nesterov \
     --weight-decay 0.0005 \
     --arch WRN28_2 \
