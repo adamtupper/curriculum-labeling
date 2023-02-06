@@ -5,4 +5,3 @@ scipy==1.4.1+computecanada
 tensorflow_gpu==2.2.0
 torch==1.12.1+computecanada
 torchvision==0.13.1+torch1121.computecanada
-wandb==0.12.5+computecanada

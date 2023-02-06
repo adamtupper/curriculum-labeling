@@ -6,7 +6,6 @@ import datetime
 import argparse
 import wrapper as super_glue
 
-import wandb
 
 parser = argparse.ArgumentParser(description='Curriculum Labeling Implementation')
 
@@ -110,9 +109,6 @@ if __name__ == '__main__':
     wrapper.set_model_optimizer()
     ## uncomment to print the model
     # print (wrapper.model)
-    
-    # Initialize W&B and save args as config
-    wandb.init(config=args, project="curriculum-labeling-replication", sync_tensorboard=True)
 
     # curriculum learning calls | train/evaluate
     # train cl

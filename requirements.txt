@@ -7,4 +7,3 @@ tensorflow-gpu==2.2.0
 torch==1.12.1+cu102
 torchcontrib==0.0.2
 torchvision==0.13.1+cu102
-wandb==0.12.5

@@ -262,7 +262,7 @@ class Wrapper:
         """
         Execute the evaluation of Curriculum Learning. Goes over all iterations and select the best one based on the validation accuracy.
         """
-        cl = curriculum_labeling.Curriculum_Labeling(self.args)
+        cl = curriculum_labeling.Curriculum_Labeling(self.args, self.model, self.model_optimizer)
         cl.evaluate_all_iterations()
 
 

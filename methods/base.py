@@ -7,7 +7,6 @@ from collections import OrderedDict
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import wandb
 
 from utils.scheduler_ramps import *
 from utils.helpers import *
@@ -307,17 +306,6 @@ class Train_Base():
         filename = '{}.checkpoint.{}.ckpt'.format(modelName, epoch)
         checkpoint_path = os.path.join(dirpath, filename)
         torch.save(state, checkpoint_path)
-        
-        # Save checkpoint to W&B
-        metadata = {'epoch': epoch}
-        artifact = wandb.Artifact(
-            name=f'model-{wandb.run.id}',
-            metadata=metadata, 
-            type='model'
-            )
-        artifact.add_file(os.path.join(checkpoint_path))
-        aliases = ['best'] if is_best else []
-        wandb.log_artifact(artifact, aliases=aliases)
 
     def save_best_checkpoint(self, state, is_best, dirpath, epoch, modelName):
         """
@@ -332,17 +320,6 @@ class Train_Base():
         """
         best_path = os.path.join(dirpath, '{}.best.ckpt'.format(modelName))
         torch.save(state, best_path)
-        
-        # Save checkpoint to W&B
-        metadata = {'epoch': epoch}
-        artifact = wandb.Artifact(
-            name=f'model-{wandb.run.id}',
-            metadata=metadata, 
-            type='model'
-            )
-        artifact.add_file(os.path.join(best_path))
-        aliases = ['best']
-        wandb.log_artifact(artifact, aliases=aliases)
 
     def accuracy(self, output, target, topk=(1,)):
         """
