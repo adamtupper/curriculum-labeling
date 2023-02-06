@@ -15,35 +15,23 @@ if [ -z "$1" ]
     exit 1
 fi
 
-# Check for W&B sync mode
+# Check for unique experiment ID
 if [ -z "$2" ]
   then
-    echo "W&B offline (true/false) not supplied"
+    echo "Unqiue experiment ID not supplied"
     exit 1
 fi
 
 # Print Job info
 echo "Current working directory: `pwd`"
 echo "Starting run at: `date`"
-echo "W&B offline: $2"
+echo "Run ID: $2"
 echo ""
 echo "Job Array ID / Job ID: $SLURM_ARRAY_JOB_ID / $SLURM_JOB_ID"
 echo "This is job $SLURM_ARRAY_TASK_ID out of $SLURM_ARRAY_TASK_COUNT jobs."
 echo ""
 
 module purge
-
-# Set Weights & Biases cache and output directories
-export WANDB_CACHE_DIR=$SLURM_TMPDIR/.cache/wandb
-export WANDB_DIR=$scratch/wandb
-mkdir -p $WANDB_CACHE_DIR
-mkdir -p $WANDB_DIR
-
-if [ "$2" = "true" ]; then
-    export WANDB_MODE="offline"
-else
-    export WANDB_MODE="online"
-fi
 
 # Copy data and code to compute node
 mkdir $SLURM_TMPDIR/data
@@ -74,6 +62,6 @@ python main.py \
     --batch_size 512 \
     --epochs 700 \
     --lr_rampdown_epochs 750 \
-    --add_name WRN28_CIFAR10_AUG_MIX_SWA \
+    --add_name WRN28_CIFAR10_AUG_MIX_SWA_$2 \
     --mixup \
     --swa
