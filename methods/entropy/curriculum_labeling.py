@@ -97,7 +97,7 @@ class Curriculum_Labeling(Train_Base):
         return lam * criterion(pred, y_a) + (1 - lam) * criterion(pred, y_b)
     # end of mixup code from: https://arxiv.org/pdf/1710.09412.pdf ==> https://github.com/facebookresearch/mixup-cifar10
 
-    def train_models(self, trainloader, unlabelledloader, unlabelled_sampler, indices_unlabelled, validloader, testloader, modelName, model, optimizer, train_logger, val_logger, num_classes = 10, hard_labeles_for_rotation = {}, init_epoch = 0):
+    def train_models(self, trainloader, unlabelledloader, unlabelled_sampler, indices_unlabelled, validloader, testloader, modelName, model, optimizer, train_logger, val_logger, iteration, num_classes = 10, hard_labeles_for_rotation = {}, init_epoch = 0):
         """
         Method to train the Curriculum Labeling method.
         When no pseudo labels are given: train_base, else: train_pseudo.
@@ -118,7 +118,12 @@ class Curriculum_Labeling(Train_Base):
             hard_labeles_for_rotation (dict, optional): dictionary containing the pseudo annotated samples (sample_index: annotation). Defaults to {}.
             init_epoch (int, optional): initial epoch to start training - could vary when finetuning. Defaults to 0.
         """
-        for epoch in range(init_epoch, self.args.epochs + (self.args.lr_rampdown_epochs-self.args.epochs)):
+        start_epoch = init_epoch
+        if self.args.no_resets:
+            end_epoch = (iteration * self.args.epochs) + self.args.epochs
+        else:
+            end_epoch = self.args.epochs
+        for epoch in range(start_epoch, end_epoch):
             start_time = time.time()
             if len(hard_labeles_for_rotation) > 0:
                 hLabels = np.zeros((len(hard_labeles_for_rotation), self.args.num_classes))
@@ -126,10 +131,10 @@ class Curriculum_Labeling(Train_Base):
                     hLabels[i][hard_labeles_for_rotation[k]] = 1
                 w = self.get_label_weights(hLabels)
                 w = torch.FloatTensor(w/100).cuda()
-                self.train_pseudo(unlabelledloader, unlabelled_sampler, indices_unlabelled, hard_labeles_for_rotation, model, optimizer, epoch, self.train_logger, modelName, weights = w, use_zca = self.args.use_zca)
+                self.train_pseudo(unlabelledloader, unlabelled_sampler, indices_unlabelled, hard_labeles_for_rotation, model, optimizer, epoch, self.train_logger, modelName, weights = w, use_zca = self.args.use_zca, last_epoch=end_epoch)
             else:
                 w = torch.FloatTensor(np.full(self.args.num_classes, 0.1)).cuda()
-                self.train_base(trainloader, model, optimizer, epoch, self.train_logger, use_zca = self.args.use_zca)
+                self.train_base(trainloader, model, optimizer, epoch, self.train_logger, use_zca = self.args.use_zca, last_epoch=end_epoch)
 
             if self.args.swa:
                 if epoch > self.args.swa_start and epoch%self.args.swa_freq == 0 :
@@ -167,8 +172,10 @@ class Curriculum_Labeling(Train_Base):
             image_indices_hard_label (dict, optional): dictionary of pseudo annotated samples. Defaults to {}.
         """
         self.best_prec1 = 0
+        
+        init_epoch = iteration * self.args.epochs if self.args.no_resets else 0
         self.train_models(self.args.trainloader, self.args.unlabelledloader, self.args.unlabelled_sampler, self.args.indices_unlabelled, self.args.validloader, self.args.testloader, '{}-Rotation'.format(iteration), \
-                    self.model, self.model_optimizer, self.train_logger, self.val_logger, num_classes = self.args.num_classes, hard_labeles_for_rotation = image_indices_hard_label, init_epoch = 0)
+                    self.model, self.model_optimizer, self.train_logger, self.val_logger, num_classes = self.args.num_classes, hard_labeles_for_rotation = image_indices_hard_label, init_epoch = init_epoch, iteration = iteration)
 
     def do_iteration(self, iteration):
         """
@@ -244,7 +251,7 @@ class Curriculum_Labeling(Train_Base):
 
         return image_indices_hard_label
 
-    def train_base(self, trainloader, model, optimizer, epoch, train_logger, use_zca = True, weights = None):
+    def train_base(self, trainloader, model, optimizer, epoch, train_logger, last_epoch, use_zca = True, weights = None):
         """
         Train using the labeled subset only.
 
@@ -269,7 +276,7 @@ class Curriculum_Labeling(Train_Base):
                 if use_zca:
                     input = apply_zca(input, zca_mean, zca_components)
 
-            if epoch <= self.args.epochs:
+            if epoch <= last_epoch:
                 lr = self.adjust_learning_rate(optimizer, epoch, i, len(trainloader))
             meters.update('lr', optimizer.param_groups[0]['lr'])
             input_var = torch.autograd.Variable(input.cuda())
@@ -289,7 +296,7 @@ class Curriculum_Labeling(Train_Base):
 
         self.log_img_and_pseudolabels(input[0], target[0], self.train_logger)
 
-    def train_pseudo(self, unlabelledloader, unlabelled_sampler, indices_unlabelled, hardLabeledResults, model, optimizer, epoch, train_logger, modelName, weights = None, use_zca = True):
+    def train_pseudo(self, unlabelledloader, unlabelled_sampler, indices_unlabelled, hardLabeledResults, model, optimizer, epoch, train_logger, modelName, last_epoch, weights = None, use_zca = True):
         """
         Train using pseudo labeled samples along with the labeled subset.
 
@@ -320,7 +327,7 @@ class Curriculum_Labeling(Train_Base):
                 if use_zca:
                     input = apply_zca(input, zca_mean, zca_components)
 
-            if epoch <= self.args.epochs:
+            if epoch <= last_epoch:
                 lr = self.adjust_learning_rate(optimizer, epoch, i, len(unlabelledloader))
             meters.update('lr', optimizer.param_groups[0]['lr'])
             input_var = torch.autograd.Variable(input.cuda())

@@ -32,6 +32,7 @@ class Wrapper:
         self.model = None
         self.ema_model = None
         self.model_optimizer = None
+        self.no_resets = args.no_resets
 
     # #@property
     # def get_model(self):
@@ -243,10 +244,11 @@ class Wrapper:
             # pass updated values to the method
             cl.update_args(self.args, None, None)
             image_indices_hard_label = cl.do_iteration(iteration)
-            # reset network
-            self.create_network()
-            self.set_model_hyperparameters()
-            self.set_model_optimizer()
+            if not self.no_resets:
+                # reset network
+                self.create_network()
+                self.set_model_hyperparameters()
+                self.set_model_optimizer()
             # update indices -- add pseudo-labeled samples to labeled set
             self.update_datasets(list(image_indices_hard_label.keys()))
             cl.update_args(self.args, self.model, self.model_optimizer, update_model=True)

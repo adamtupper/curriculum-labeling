@@ -9,6 +9,7 @@ import wrapper as super_glue
 
 parser = argparse.ArgumentParser(description='Curriculum Labeling Implementation')
 
+parser.add_argument('--no-resets', action='store_true', help='do not reset the model between iterations')
 parser.add_argument('--dataset', metavar='DATASET', default='cifar10', choices=['cifar10','svhn','imagenet'], 
                     help='dataset: cifar10, svhn or imagenet' )
 parser.add_argument('--num_labeled', default=400, type=int, metavar='L',
