@@ -61,7 +61,7 @@ python main.py \
     --weight-decay 0.0005 \
     --arch WRN28_2 \
     --batch_size 512 \
-    --epochs 200 \  # per-iteration
+    --epochs 200 \
     --lr_rampdown_epochs 1200 \
     --add_name WRN28_CIFAR10_AUG_MIX_SWA_$2 \
     --mixup \
