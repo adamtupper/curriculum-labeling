@@ -172,24 +172,24 @@ def load_data_subsets(data_aug, dataset, data_target_dir):
     print ('Directory: {}'.format(data_target_dir))
 
     if dataset == 'cifar10':
-        train_data = datasets.CIFAR10(data_target_dir, train=True, transform=train_transform, download=True)
-        train_data_noT = datasets.CIFAR10(data_target_dir, train=True, transform=test_transform, download=True)
-        test_data = datasets.CIFAR10(data_target_dir, train=False, transform=test_transform, download=True)
+        train_data = datasets.CIFAR10(data_target_dir, train=True, transform=train_transform, download=False)
+        train_data_noT = datasets.CIFAR10(data_target_dir, train=True, transform=test_transform, download=False)
+        test_data = datasets.CIFAR10(data_target_dir, train=False, transform=test_transform, download=False)
         num_classes = 10
     elif dataset == 'cifar100':
-        train_data = datasets.CIFAR100(data_target_dir, train=True, transform=train_transform, download=True)
-        train_data_noT = datasets.CIFAR100(data_target_dir, train=True, transform=train_transform, download=True)
-        test_data = datasets.CIFAR100(data_target_dir, train=False, transform=test_transform, download=True)
+        train_data = datasets.CIFAR100(data_target_dir, train=True, transform=train_transform, download=False)
+        train_data_noT = datasets.CIFAR100(data_target_dir, train=True, transform=train_transform, download=False)
+        test_data = datasets.CIFAR100(data_target_dir, train=False, transform=test_transform, download=False)
         num_classes = 100
     elif dataset == 'svhn':
-        train_data = datasets.SVHN(data_target_dir, split='train', transform=train_transform, download=True)
-        train_data_noT = datasets.SVHN(data_target_dir, split='train', transform=test_transform, download=True)
-        test_data = datasets.SVHN(data_target_dir, split='test', transform=test_transform, download=True)
+        train_data = datasets.SVHN(data_target_dir, split='train', transform=train_transform, download=False)
+        train_data_noT = datasets.SVHN(data_target_dir, split='train', transform=test_transform, download=False)
+        test_data = datasets.SVHN(data_target_dir, split='test', transform=test_transform, download=False)
         num_classes = 10
     elif dataset == 'imagenet':
-        train_data = torchvision.datasets.ImageNet(data_target_dir, split='train', transform=train_transform) #, download=True)
-        train_data_noT = torchvision.datasets.ImageNet(data_target_dir, split='train', transform=test_transform) #, download=True)
-        test_data = torchvision.datasets.ImageNet(data_target_dir, split='val', transform=test_transform) #, download=True)
+        train_data = torchvision.datasets.ImageNet(data_target_dir, split='train', transform=train_transform) #, download=False)
+        train_data_noT = torchvision.datasets.ImageNet(data_target_dir, split='train', transform=test_transform) #, download=False)
+        test_data = torchvision.datasets.ImageNet(data_target_dir, split='val', transform=test_transform) #, download=False)
         num_classes = 1000
     else:
         assert False, 'Do not support dataset : {}'.format(dataset)
