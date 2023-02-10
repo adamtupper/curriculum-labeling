@@ -60,5 +60,5 @@ python main.py \
     --batch_size 512 \
     --epochs 700 \
     --lr_rampdown_epochs 750 \
-    --add_name WRN28_CIFAR10_AUG_MIX_SWA_$2 \
+    --add_name WRN28_CIFAR10_$2 \
     --augPolicy 1
