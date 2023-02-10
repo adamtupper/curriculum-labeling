@@ -35,19 +35,17 @@ module purge
 
 # Copy data and code to compute node
 mkdir $SLURM_TMPDIR/data
-tar cf $project/curriculum-labeling.tar.gz $project/curriculum-labeling
-tar xf $project/curriculum-labeling.tar.gz -C $SLURM_TMPDIR/curriculum-labeling
-tar xf $project/data/cifar-10-python.tar.gz -C $SLURM_TMPDIR/data
+cd $project
+tar cf curriculum-labeling.tar.gz curriculum-labeling
+tar xf curriculum-labeling.tar.gz -C $SLURM_TMPDIR
+tar xf data/cifar-10-python.tar.gz -C $SLURM_TMPDIR/data
 
 cd $SLURM_TMPDIR/curriculum-labeling
 
-# Create virtual environment
+# Activate virtual environment
+# (cannot be created on Narval compute nodes because of extra dependencies)
 module load python/3.8.10 cuda cudnn
-virtualenv --no-download $SLURM_TMPDIR/env
-source $SLURM_TMPDIR/env/bin/activate
-pip install --no-index --upgrade pip
-pip install -r cc_requirements_extra.txt
-pip install --no-index -r cc_requirements.txt
+source ~/venvs/cl/bin/activate
 
 # Run training script
 python main.py \
