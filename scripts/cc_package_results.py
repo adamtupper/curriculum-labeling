@@ -8,6 +8,7 @@ import argparse
 import glob
 import os
 import shutil
+import string
 import tarfile
 
 
@@ -25,7 +26,7 @@ def parse_args():
 def extract(line, prefix):
     """Extract metadata value given by `prefix` from the line if present."""
     if prefix in line:
-        return line.split(prefix)[1].strip()
+        return line.split(prefix)[1].strip().printable
     else:
         return None
 
