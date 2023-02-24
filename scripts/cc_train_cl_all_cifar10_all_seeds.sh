@@ -2,7 +2,7 @@
 # Launch Slurm jobs for training with curriculum labeling for all additional
 # seeds and all levels of supervision on CIFAR-10.
 
-seeds=(663829 225659 497412 865115 830930 750366 232841 296628 973089)
+seeds=(960146 663829 225659 497412 865115 830930 750366 232841 296628 973089)
 
 for seed in "${seeds[@]}"
 do
