@@ -6,9 +6,15 @@ seeds=(663829 225659 497412 865115 830930 750366 232841 296628 973089)
 
 for seed in "${seeds[@]}"
 do
+    echo "Submitting jobs for seed: $seed..."
     sbatch cc_train_cl_cifar10_4000.sh $seed $(cat /proc/sys/kernel/random/uuid)
+    sleep 10
     sbatch cc_train_cl_cifar10_2000.sh $seed $(cat /proc/sys/kernel/random/uuid)
+    sleep 10
     sbatch cc_train_cl_cifar10_1000.sh $seed $(cat /proc/sys/kernel/random/uuid)
+    sleep 10
     sbatch cc_train_cl_cifar10_500.sh $seed $(cat /proc/sys/kernel/random/uuid)
+    sleep 10
     sbatch cc_train_cl_cifar10_250.sh $seed $(cat /proc/sys/kernel/random/uuid)
+    sleep 10
 done
