@@ -67,9 +67,9 @@ def main():
             tar.add(results_dir, arcname=os.path.basename(results_dir))
 
         # Clean-up
-        # shutil.rmtree(results_dir)
-        # for log_file in slurm_logs:
-        #     os.remove(log_file)
+        shutil.rmtree(results_dir)
+        for log_file in slurm_logs:
+            os.remove(log_file)
 
 
 if __name__ == "__main__":
