@@ -15,17 +15,10 @@ if [ -z "$1" ]
     exit 1
 fi
 
-# Check for unique experiment ID
-if [ -z "$2" ]
-  then
-    echo "Unqiue experiment ID not supplied"
-    exit 1
-fi
-
 # Print Job info
 echo "Current working directory: `pwd`"
-echo "Starting run at: `date`"
-echo "Run ID: $2"
+echo "Run ID: CL_M_$SLURM_ARRAY_JOB_ID"
+echo "Seed: $1"
 echo ""
 echo "Job Array ID / Job ID: $SLURM_ARRAY_JOB_ID / $SLURM_JOB_ID"
 echo "This is job $SLURM_ARRAY_TASK_ID out of $SLURM_ARRAY_TASK_COUNT jobs."
@@ -61,6 +54,6 @@ python main.py \
     --batch_size 512 \
     --epochs 200 \
     --lr_rampdown_epochs 1200 \
-    --add_name WRN28_CIFAR10_AUG_MIX_SWA_$2 \
+    --add_name WRN28_CIFAR10_AUG_MIX_SWA_250_$1_CL_M_$SLURM_ARRAY_JOB_ID \
     --mixup \
     --swa
