@@ -27,7 +27,7 @@ def extract(line, prefix):
     """Extract metadata value given by `prefix` from the line if present."""
     if prefix in line:
         raw_string = line.split(prefix)[1].strip()
-        return filter(lambda x: x in string.printable, raw_string)
+        return "".join(filter(lambda x: x in string.printable, raw_string))
     else:
         return None
 
