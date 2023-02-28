@@ -103,10 +103,18 @@ def load_data_subsets(data_aug, dataset, data_target_dir):
 
     if data_aug==1 or data_aug == 2:
         if dataset == 'cifar10' or dataset == 'cifar100':
-            train_transform = transforms.Compose([transforms.RandomCrop(32, padding=4),
-                                                    transforms.RandomHorizontalFlip(),
-                                                    transforms.ToTensor(),
-                                                    transforms.Normalize(mean, std)])
+            # Original data augmentation
+            # train_transform = transforms.Compose([transforms.RandomCrop(32, padding=4),
+            #                                         transforms.RandomHorizontalFlip(),
+            #                                         transforms.ToTensor(),
+            #                                         transforms.Normalize(mean, std)])
+            
+            # Augmentation defined in Oliver et al. (2018)
+            train_transform = transforms.Compose([transforms.RandomHorizontalFlip(),
+                                                  transforms.RandomAffine(degrees=0, translate=(2, 2)),
+                                                  transforms.ToTensor(),
+                                                  transforms.Lambda(lambda x: x + torch.normal(mean=0.0, std=0.15, size=x.size())),  # Gaussian noise
+                                                  transforms.Normalize(mean, std)])
 
             if data_aug==2:
                 prRed ('heavy random data augmentation will be applied')
